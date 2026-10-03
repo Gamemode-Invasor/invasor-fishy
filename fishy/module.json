@@ -1,0 +1,387 @@
+{
+  "api": 1,
+  "name": "Fishy",
+  "version": "0.2.0",
+  "author": "FranjeGueje",
+  "description": "Frame generation and scaling profiles for MAKO Renderer: edit them and choose one per game.",
+  "order": 35,
+  "tab": "Fishy",
+  "forms": {
+    "profile": [
+      {
+        "section": "Frame generation",
+        "items": [
+          {
+            "key": "frame_generation_provisioned",
+            "type": "toggle",
+            "label": "Prepare frame generation",
+            "default": true,
+            "hint": "Sets frame generation up when the game starts. Turn off only to use scaling alone. Applies on the next launch."
+          },
+          {
+            "key": "frame_generation_enabled",
+            "type": "toggle",
+            "label": "Generate frames",
+            "default": true,
+            "hint": "Turns generation on or off live; off is MAKO's 0x position, without losing the rest of the profile.",
+            "when": {
+              "frame_generation_provisioned": true
+            }
+          },
+          {
+            "key": "adaptive",
+            "type": "toggle",
+            "label": "Adaptive",
+            "default": false,
+            "hint": "Varies the generated frames toward a target frame rate instead of a fixed multiplier.",
+            "when": {
+              "frame_generation_provisioned": true
+            }
+          },
+          {
+            "key": "multiplier",
+            "type": "number",
+            "label": "Multiplier",
+            "min": 2,
+            "max": 5,
+            "default": 2,
+            "when": {
+              "frame_generation_provisioned": true,
+              "adaptive": false
+            },
+            "hint": "Total frames shown per real frame: 2 doubles the frame rate. Start with 2 and go up only if it helps."
+          },
+          {
+            "key": "base_fps_cap",
+            "type": "number",
+            "label": "Base FPS cap",
+            "min": 0,
+            "max": 1000,
+            "step": 5,
+            "default": 0,
+            "hint": "Caps the game's real frames; 0 is off. Set by Steady base cap while that's on. Setting a cap turns Dynamic cadence recovery off.",
+            "when": {
+              "frame_generation_provisioned": true
+            },
+            "disabled_when": {
+              "adaptive": true,
+              "adaptive_auto_base_fps_cap": true
+            }
+          },
+          {
+            "key": "gamescope_vrr_mode",
+            "type": "select",
+            "label": "Gamescope VRR",
+            "default": "follow-steam",
+            "options": [
+              {
+                "value": "follow-steam",
+                "label": "Follow Steam"
+              },
+              {
+                "value": "on",
+                "label": "On"
+              },
+              {
+                "value": "off",
+                "label": "Off"
+              }
+            ],
+            "hint": "Follow Steam leaves VRR alone. On/Off request it while this game runs, on displays that support VRR.",
+            "when": {
+              "frame_generation_provisioned": true
+            }
+          }
+        ]
+      },
+      {
+        "section": "Adaptive",
+        "when": {
+          "frame_generation_provisioned": true,
+          "adaptive": true
+        },
+        "items": [
+          {
+            "key": "target_fps",
+            "type": "number",
+            "label": "Target FPS",
+            "min": 10,
+            "max": 1000,
+            "step": 5,
+            "default": 120,
+            "hint": "Output frame rate to aim for. A goal, not a promise: an unreachable target is simply missed."
+          },
+          {
+            "key": "adaptive_max_multiplier",
+            "type": "number",
+            "label": "Max multiplier",
+            "min": 2,
+            "max": 5,
+            "default": 3,
+            "hint": "The most frames Adaptive may show per real frame."
+          },
+          {
+            "key": "adaptive_auto_base_fps_cap",
+            "type": "toggle",
+            "label": "Steady base cap",
+            "default": false,
+            "hint": "Caps real frames at half the target for an even cadence. Can cost responsiveness. Turns Dynamic cadence recovery off."
+          },
+          {
+            "key": "adaptive_fractional_real_frame_priority",
+            "type": "select",
+            "label": "Real frame priority",
+            "default": "auto",
+            "options": [
+              {
+                "value": "auto",
+                "label": "Automatic"
+              },
+              {
+                "value": "low",
+                "label": "Low"
+              },
+              {
+                "value": "medium",
+                "label": "Medium"
+              },
+              {
+                "value": "high",
+                "label": "High"
+              },
+              {
+                "value": "very-high",
+                "label": "Very high"
+              }
+            ],
+            "hint": "With Steady base cap off (fractional Adaptive): keeps more real frames in the mix. Higher can lower latency and artifacts, but pacing may feel less even. Turns Dynamic cadence recovery off.",
+            "when": {
+              "adaptive_auto_base_fps_cap": false
+            }
+          },
+          {
+            "key": "adaptive_stable_cadence",
+            "type": "toggle",
+            "label": "Smooth cadence",
+            "default": true,
+            "hint": "Favours an even, validated delivery pattern. Compare on and off in each game."
+          }
+        ]
+      },
+      {
+        "section": "Scaling",
+        "items": [
+          {
+            "key": "scaling_enabled",
+            "type": "toggle",
+            "label": "Scaling",
+            "default": false,
+            "hint": "Upscales the game's image. Applies on the next launch."
+          },
+          {
+            "key": "scaling_method",
+            "type": "select",
+            "label": "Method",
+            "default": "ls1",
+            "when": {
+              "scaling_enabled": true
+            },
+            "options": [
+              {
+                "value": "ls1",
+                "label": "LS1"
+              },
+              {
+                "value": "ls1-performance",
+                "label": "LS1 Performance"
+              },
+              {
+                "value": "mako",
+                "label": "MAKO Scaler"
+              },
+              {
+                "value": "native",
+                "label": "Native resolution"
+              }
+            ],
+            "hint": "LS1 needs Lossless.dll (falls back to MAKO Scaler if it fails); MAKO Scaler doesn't. Ultra performance uses LS1 Performance.",
+            "disabled_when": {
+              "ultra_performance": true
+            }
+          },
+          {
+            "key": "scaling_factor",
+            "type": "slider",
+            "label": "Scale factor",
+            "min": 1,
+            "max": 2,
+            "step": 0.05,
+            "default": 1.5,
+            "when": {
+              "scaling_enabled": true
+            },
+            "hint": "Output size over source size, per side: 1.5 turns 720p into 1080p. Lower the in-game resolution to match."
+          },
+          {
+            "key": "scaling_sharpness",
+            "type": "slider",
+            "label": "Sharpness",
+            "min": 0,
+            "max": 1,
+            "step": 0.05,
+            "default": 0.8,
+            "when": {
+              "scaling_enabled": true,
+              "scaling_method": [
+                "mako",
+                "ls1",
+                "ls1-performance"
+              ]
+            },
+            "hint": "Sharpening strength after scaling."
+          },
+          {
+            "key": "scaling_supersampling",
+            "type": "toggle",
+            "label": "Quality supersampling",
+            "default": false,
+            "hint": "Lets variable Gamescope surfaces render beyond the display before downsampling.",
+            "when": {
+              "scaling_enabled": true
+            }
+          }
+        ]
+      },
+      {
+        "section": "Performance",
+        "items": [
+          {
+            "key": "flow_scale",
+            "type": "slider",
+            "label": "Flow scale",
+            "min": 0.25,
+            "max": 1,
+            "step": 0.05,
+            "default": 0.8,
+            "hint": "Resolution used to estimate motion. Lower is lighter on the GPU but less precise.",
+            "when": {
+              "frame_generation_provisioned": true
+            },
+            "disabled_when": {
+              "ultra_performance": true
+            }
+          },
+          {
+            "key": "performance_mode",
+            "type": "toggle",
+            "label": "Lighter model",
+            "default": false,
+            "hint": "Uses the lighter frame generation model: faster, slightly lower quality.",
+            "when": {
+              "frame_generation_provisioned": true
+            },
+            "disabled_when": {
+              "ultra_performance": true
+            }
+          },
+          {
+            "key": "ultra_performance",
+            "type": "toggle",
+            "label": "Ultra performance",
+            "default": false,
+            "hint": "A preset: flow scale 0.7, the lighter model and FP16 (and LS1 Performance when scaling), locked while it's on. Turning it off puts flow scale back to 0.8. Applies on the next launch."
+          },
+          {
+            "key": "gpu",
+            "type": "text",
+            "label": "GPU",
+            "default": "",
+            "max_length": 128,
+            "placeholder": "automatic",
+            "hint": "GPU name, vendor:device id or PCI bus id. Leave empty to let MAKO choose. Applies on the next launch.",
+            "when": {
+              "frame_generation_provisioned": true
+            }
+          }
+        ]
+      },
+      {
+        "section": "Compatibility",
+        "open": false,
+        "items": [
+          {
+            "key": "frame_generation_refresh_threshold",
+            "type": "number",
+            "label": "Pause at refresh rate",
+            "min": 0,
+            "max": 1000,
+            "default": 0,
+            "hint": "Pauses generation when Gamescope reports a refresh rate at or below this; 0 is off."
+          },
+          {
+            "key": "dynamic_cadence_recovery",
+            "type": "toggle",
+            "label": "Dynamic cadence recovery",
+            "default": false,
+            "hint": "Rechecks the game's native cadence, for games that change frame rate between menus and play. Turning it on clears the real-frame caps (Base FPS cap, Steady base cap, Real frame priority)."
+          },
+          {
+            "key": "dynamic_cadence_probe_interval_seconds",
+            "type": "slider",
+            "label": "Recovery interval",
+            "min": 0.1,
+            "max": 3,
+            "step": 0.1,
+            "default": 2,
+            "unit": "s",
+            "when": {
+              "dynamic_cadence_recovery": true
+            },
+            "hint": "How often the cadence is rechecked."
+          },
+          {
+            "key": "swapchain_image_count_compatibility",
+            "type": "toggle",
+            "label": "Game swapchain images",
+            "default": false,
+            "hint": "Keeps the game's own swapchain image count. Only for games that won't start otherwise. Applies on the next launch."
+          }
+        ]
+      }
+    ],
+    "global": [
+      {
+        "key": "allow_fp16",
+        "type": "toggle",
+        "label": "Allow FP16",
+        "default": true,
+        "hint": "Lets frame generation use half precision where the GPU supports it. Ultra performance turns it on. Applies on the next launch."
+      },
+      {
+        "key": "dll",
+        "type": "text",
+        "label": "Lossless.dll path",
+        "default": "",
+        "max_length": 512,
+        "placeholder": "automatic",
+        "hint": "Where Lossless.dll is. Leave empty to let MAKO find it. Frame generation and LS1 need it."
+      }
+    ],
+    "launcher": [
+      {
+        "key": "enable_zink",
+        "type": "toggle",
+        "label": "Zink",
+        "default": false,
+        "hint": "Runs OpenGL games through Vulkan (Mesa's Zink), for OpenGL games that need it. All games started with mako-launch, from their next start."
+      },
+      {
+        "key": "force_alsa_audio",
+        "type": "toggle",
+        "label": "Force ALSA audio",
+        "default": false,
+        "hint": "Uses ALSA audio in SDL and Wine/Proton instead of PulseAudio. May help a game's audio or Zink. All games started with mako-launch, from their next start."
+      }
+    ]
+  }
+}
