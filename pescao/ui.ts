@@ -1,11 +1,11 @@
 import { currentGame, defineModule, ui, type FormStore, type ModuleCtx, type SettingsForm, type SettingValue } from "invasor";
 
-// Fishy: MAKO Renderer (frame generation, scaling) from the panel.
+// Pescao: MAKO Renderer (frame generation, scaling) from the panel.
 // Game: one switch per game. On = the game gets its own profile (named after it, its id
 // in active_in), all its options show below, and the launch option MAKO needs is there
 // to copy. Off = the game is taken out of it.
 // Manage: MAKO's global options and every profile. Everything lives in MAKO's own
-// conf.toml; Fishy stores nothing of its own.
+// conf.toml; Pescao stores nothing of its own.
 
 interface Status {
   installed: boolean;
@@ -63,8 +63,8 @@ async function form(ctx: ModuleCtx, name: string, st: FormStore): Promise<Settin
 
 const TESTED = "4.0"; // keep in sync with updates.TESTED
 
-/** MAKO's shaders (its bundled vkBasalt) are left out of Fishy for now. */
-const SHADERS_NOTE = "Shaders (MAKO's vkBasalt effects) aren't set up by Fishy for now: use mako-ui for them, and add the variables it shows to the launch option.";
+/** MAKO's shaders (its bundled vkBasalt) are left out of Pescao for now. */
+const SHADERS_NOTE = "Shaders (MAKO's vkBasalt effects) aren't set up by Pescao for now: use mako-ui for them, and add the variables it shows to the launch option.";
 
 /** Copies text to the clipboard: the Clipboard API, else the older copy command. */
 async function copyText(text: string): Promise<boolean> {
@@ -114,13 +114,13 @@ async function launchOption(ctx: ModuleCtx, name: string): Promise<HTMLElement[]
   return items;
 }
 
-/** A note when the installed MAKO isn't the series Fishy was tested with. */
+/** A note when the installed MAKO isn't the series Pescao was tested with. */
 async function compatNote(ctx: ModuleCtx): Promise<HTMLElement[]> {
   try {
     const c = await ctx.call<{ installed: string | null; compat: string | null; tested: string }>("compat");
     if (c.compat === "newer_minor" || c.compat === "unsupported")
-      return [ui.info(`⚠ MAKO ${c.installed} is newer than what Fishy was tested with (${c.tested}): some options may be missing.`)];
-    if (c.compat === "older") return [ui.info(`⚠ MAKO ${c.installed} is older than what Fishy was tested with (${c.tested}).`)];
+      return [ui.info(`⚠ MAKO ${c.installed} is newer than what Pescao was tested with (${c.tested}): some options may be missing.`)];
+    if (c.compat === "older") return [ui.info(`⚠ MAKO ${c.installed} is older than what Pescao was tested with (${c.tested}).`)];
   } catch {
     /* not essential */
   }
@@ -380,7 +380,7 @@ export default defineModule({
             lines.push(ui.info(`MAKO Renderer is installed by your system (${st.path}), not in ~/.local: update it with your package manager.`));
           else if (st.state === "decky") lines.push(ui.info("MAKO Renderer is managed by MAKO Decky: update it from there."));
           else if (st.latest_compat === "unsupported")
-            lines.push(ui.info(`MAKO Renderer ${st.latest} is a new major version that this Fishy doesn't know: update Fishy first.`));
+            lines.push(ui.info(`MAKO Renderer ${st.latest} is a new major version that this Pescao doesn't know: update Pescao first.`));
           else
             lines.push(
               ui.button({
@@ -390,7 +390,7 @@ export default defineModule({
                     ? `Update MAKO Renderer from ${st.installed} to ${st.latest}? Your profiles are kept.`
                     : `Install MAKO Renderer ${st.latest} in ~/.local?`;
                   if (st.latest_compat === "newer_minor")
-                    what += ` Fishy was tested with MAKO ${st.tested}: new options won't show here (set them with mako-ui).`;
+                    what += ` Pescao was tested with MAKO ${st.tested}: new options won't show here (set them with mako-ui).`;
                   if (!(await ui.confirm(what, { ok: "Install" }))) return;
                   ctx.toast(`Installing MAKO Renderer ${st.latest}…`);
                   try {
@@ -407,7 +407,7 @@ export default defineModule({
           result.replaceChildren(...lines);
         };
         el.append(
-          ui.info(`This Fishy is tested with MAKO Renderer ${TESTED}.`),
+          ui.info(`This Pescao is tested with MAKO Renderer ${TESTED}.`),
           ui.info("Stable MAKO Renderer releases from GitHub, installed into ~/.local by MAKO's own installer."),
           ui.button({ label: "Check for updates", onClick: () => void check() }),
           result,
@@ -418,13 +418,13 @@ export default defineModule({
       label: "Credits",
       render(el) {
         el.append(
-          ui.info("Fishy is a panel for MAKO Renderer: frame generation, scaling and shaders on Linux (github.com/eugeniosegala/MAKO)."),
+          ui.info("Pescao is a panel for MAKO Renderer: frame generation, scaling and shaders on Linux (github.com/eugeniosegala/MAKO)."),
           ui.separator(),
           ui.info("Thanks to Eugenio Segala and every MAKO contributor."),
           ui.info("Thanks to PancakeTAS and the lsfg-vk contributors, the project MAKO comes from."),
           ui.info("Thanks to THS, the developer of Lossless Scaling, whose frame generation MAKO uses (you need your own copy of Lossless Scaling)."),
           ui.separator(),
-          ui.info("Fishy is not affiliated with MAKO, lsfg-vk or Lossless Scaling. Please don't report problems with this module to them."),
+          ui.info("Pescao is not affiliated with MAKO, lsfg-vk or Lossless Scaling. Please don't report problems with this module to them."),
         );
       },
     },

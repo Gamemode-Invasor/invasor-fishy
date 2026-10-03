@@ -1,4 +1,4 @@
-"""Fishy: MAKO Renderer profiles (frame generation, scaling) from Invasor's panel.
+"""Pescao: MAKO Renderer profiles (frame generation, scaling) from Invasor's panel.
 
 The source of truth is MAKO's own conf.toml (mako.config_path()), never Invasor's
 settings: every call reads it, changes what was asked, and writes it back with
@@ -41,13 +41,13 @@ _cli_missing_logged = False
 
 
 def _cli():
-    """mako-cli of the MAKO in use, or None (then Fishy's own checks are all there is)."""
+    """mako-cli of the MAKO in use, or None (then Pescao's own checks are all there is)."""
     global _cli_missing_logged
     found = updates.find_layer()
     cli = validator.find_cli(found[1] if found else None)
     if cli is None and not _cli_missing_logged:
         _cli_missing_logged = True
-        ctx.log.info("mako-cli not found: conf.toml changes are checked by Fishy only")
+        ctx.log.info("mako-cli not found: conf.toml changes are checked by Pescao only")
     return cli
 
 
@@ -62,7 +62,7 @@ def _mako_validate(tmp_path):
     except validator.Rejected as e:
         raise ctx.InvalidArgument(f"MAKO rejected the change: {e}") from None
     except (OSError, TimeoutError) as e:
-        ctx.log.warning("mako-cli couldn't validate (%s): saving with Fishy's own checks", e)
+        ctx.log.warning("mako-cli couldn't validate (%s): saving with Pescao's own checks", e)
 
 
 def mako_problem(path=None):
@@ -286,7 +286,7 @@ def update_status():
 
 
 def compat():
-    """{installed, compat, tested}: whether the installed MAKO is the series Fishy was
+    """{installed, compat, tested}: whether the installed MAKO is the series Pescao was
     tested with (no network)."""
     have = updates.installed()
     version = have and have["version"]
@@ -305,7 +305,7 @@ def update_install():
             "system": "MAKO Renderer is installed by the system, not in ~/.local: update it there",
         }[status["state"]])
     if status["latest_compat"] == "unsupported":
-        raise ctx.InvalidArgument(f"MAKO Renderer {status['latest']} is a new major version: update Fishy first")
+        raise ctx.InvalidArgument(f"MAKO Renderer {status['latest']} is a new major version: update Pescao first")
     try:
         said = updates.install(updates.download(status["latest"]), status["latest"])
     except updates.UpdateError as e:

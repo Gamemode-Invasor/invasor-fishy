@@ -1,8 +1,8 @@
 """MAKO's own config validator: `mako-cli validate -c <file>`.
 
-Used as a second safety net before Fishy replaces conf.toml: MAKO judges its own format
+Used as a second safety net before Pescao replaces conf.toml: MAKO judges its own format
 (it rejects, e.g., out-of-range values and unknown methods), so a newer MAKO's rules
-are honoured even when Fishy doesn't know them. Optional: without mako-cli Fishy
+are honoured even when Pescao doesn't know them. Optional: without mako-cli Pescao
 relies on its own checks.
 
 Pure stdlib, no Invasor imports.

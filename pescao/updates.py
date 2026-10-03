@@ -35,7 +35,7 @@ RELEASES = f"https://api.github.com/repos/{REPO}/releases?per_page=30"
 DOWNLOAD_PREFIX = f"https://github.com/{REPO}/releases/download/"
 # GitHub serves release files from github.com, which redirects to its asset hosts.
 HOSTS = ("api.github.com", "github.com", "objects.githubusercontent.com", "release-assets.githubusercontent.com")
-USER_AGENT = "invasor-fishy"
+USER_AGENT = "invasor-pescao"
 TIMEOUT = 20
 INSTALL_TIMEOUT = 180
 MAX_DOWNLOAD = 64 << 20
@@ -62,8 +62,8 @@ VERSION = re.compile(r"(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.]+))?")
 # Version strings inside the layer library: whole NUL-separated strings.
 EMBEDDED = re.compile(rb"(?<![\w.-])(\d{1,3}\.\d{1,3}\.\d{1,3}(?:-[0-9A-Za-z.]{1,20})?)\x00")
 
-# The MAKO series this Fishy was written and tested against. Same major, newer minor:
-# usable (new options just don't show here). Another major: never installed by Fishy.
+# The MAKO series this Pescao was written and tested against. Same major, newer minor:
+# usable (new options just don't show here). Another major: never installed by Pescao.
 TESTED = (4, 0)
 SUPPORTED_MAJOR = 4
 
@@ -278,7 +278,7 @@ def install(data, expected, prefix=PREFIX):
     prefix = Path(prefix)
     work_parent = prefix / "share"
     work_parent.mkdir(parents=True, exist_ok=True)
-    work = Path(tempfile.mkdtemp(prefix=".fishy-mako-update-", dir=work_parent))
+    work = Path(tempfile.mkdtemp(prefix=".pescao-mako-update-", dir=work_parent))
     try:
         with tar:
             for rel, m in _members(tar):

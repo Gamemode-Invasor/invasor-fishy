@@ -1,11 +1,11 @@
 {
   "api": 1,
-  "name": "Fishy",
+  "name": "Pescao",
   "version": "0.2.0",
   "author": "FranjeGueje",
   "description": "Frame generation and scaling profiles for MAKO Renderer: edit them and choose one per game.",
   "order": 35,
-  "tab": "Fishy",
+  "tab": "Pescao",
   "forms": {
     "profile": [
       {
