@@ -8,7 +8,8 @@ Steam's gamepad UI.
   `MAKO_PROFILE='<profile>' ~/.local/bin/mako-launch %command%`. MAKO only runs in games started that way, and
   `MAKO_PROFILE` is what picks the profile: MAKO 4.0 matches `active_in` against executables and process names, not
   Steam ids. The game's id is still kept in `active_in`, so Pescao knows which game uses which profile. All the
-  profile's options follow: frame generation, scaling, performance and compatibility.
+  profile's options follow: frame generation, scaling, performance and compatibility. In Quick Access the tab only
+  appears while the running game has a MAKO profile; to give a game its first one, use the library's panel.
 
   **Shaders are left out for now:** MAKO's bundled vkBasalt effects aren't set up by Pescao. Use mako-ui for them, and
   add the variables it shows (`ENABLE_VKBASALT=1 VKBASALT_CONFIG_FILE=…`) to the game's launch option.
@@ -32,7 +33,7 @@ mako-ui's other files (shaders, MAKO Decky's settings and metadata) aren't touch
 its launch option again for the games that use it.
 
 ## Requirements
-- Invasor with `when` support in forms and `author` in module.json (module API 1).
+- Invasor 0.1.3 or newer (module API 1); older ones refuse to install it (`min_core` in module.json).
 - [MAKO Renderer](https://github.com/eugeniosegala/MAKO) 4.x installed standalone (tested with 4.0.x), and your own
   copy of Lossless Scaling for frame generation and LS1 scaling. Newer 4.x releases work, though options they add may
   not show in Pescao; a new major version needs a newer Pescao.

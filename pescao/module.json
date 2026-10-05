@@ -1,7 +1,8 @@
 {
   "api": 1,
   "name": "Pescao",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "min_core": "0.1.3",
   "author": "FranjeGueje",
   "description": "Frame generation and scaling profiles for MAKO Renderer: edit them and choose one per game.",
   "order": 35,
