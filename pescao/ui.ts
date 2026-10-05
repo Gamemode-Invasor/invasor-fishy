@@ -430,6 +430,14 @@ export default defineModule({
     },
   ],
   tabsAlign: "justify",
+  // Quick Access only: with no MAKO profile for the running game there is nothing to show there.
+  // An error (say, an unreadable conf.toml) lets the tab show, so Pescao can still say what's wrong.
+  showInQam: async (ctx) => {
+    const running = ctx.game().running;
+    if (!running) return true;
+    const r = await ctx.call<{ profile: string | null }>("game_profile", { appid: running.appid, shortcut: running.shortcut });
+    return r.profile !== null;
+  },
   onGameChange: (_game, ctx) => void renderGame(ctx),
   destroy: () => {
     gameEl = profilesEl = null;
